@@ -2,6 +2,8 @@ const express = require('express');
 const promisePool = require('./config/db');
 const bcrypt = require('bcrypt');  // For password hashing
 const cors = require('cors');  // Import cors package
+require('dotenv').config(); // Load environment variables from .env file
+
 
 
 const app = express();
