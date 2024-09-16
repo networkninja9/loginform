@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,28 +89,42 @@
     </style>
 </head>
 <body>
-    <form id="signupForm">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" aria-label="Username" required>
+                <div id="usernameError" class="error-message"></div>
+            </div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" aria-label="Email" required>
+                <div id="emailError" class="error-message"></div>
+            </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" aria-label="Password" required>
+                <div id="passwordError" class="error-message"></div>
+            </div>
 
-        <button type="submit">Sign Up</button>
-    </form>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        // Submit form via AJAX using Axios
         document.getElementById('signupForm').addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+
+            // Clear previous error messages
+            document.querySelectorAll('.error-message').forEach(elem => elem.textContent = '');
 
             try {
                 const response = await axios.post('http://localhost:5000/signup', {
@@ -122,7 +135,11 @@
                 alert('Sign up successful: ' + response.data.message);
             } catch (error) {
                 console.error(error);
-                alert('Sign up failed: ' + error.response.data.error);
+                if (error.response && error.response.data && error.response.data.error) {
+                    const errorMessage = error.response.data.error;
+                    document.querySelector('.error-message').textContent = errorMessage;
+                    alert('Sign up failed: ' + errorMessage);
+                }
             }
         });
     </script>
